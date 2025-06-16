@@ -1,0 +1,151 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "mon petit calepin",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": [
+                        "C'est ça"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NextIntent",
+                    "samples": []
+                },
+                {
+                    "name": "CallContact",
+                    "slots": [
+                        {
+                            "name": "ContactName",
+                            "type": "AMAZON.FirstName"
+                        }
+                    ],
+                    "samples": [
+                        "Rameute {ContactName}",
+                        "Prie {ContactName}",
+                        "Saisit {ContactName}",
+                        "Tape {ContactName}",
+                        "Compose {ContactName}",
+                        "Cherche {ContactName}",
+                        "Compose le numéro de {ContactName}",
+                        "Appelle {ContactName}"
+                    ]
+                },
+                {
+                    "name": "AddContact",
+                    "slots": [
+                        {
+                            "name": "ContactName",
+                            "type": "AMAZON.FirstName",
+                            "samples": [
+                                "{ContactName}"
+                            ]
+                        },
+                        {
+                            "name": "ContactNumber",
+                            "type": "AMAZON.PhoneNumber",
+                            "samples": [
+                                "{ContactNumber}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "Range {ContactNumber} dans {ContactName}",
+                        "Baptise {ContactNumber} en tant que {ContactName}",
+                        "Range numéro {ContactNumber} dans le tiroir {ContactName}",
+                        "Range {ContactName} avec le numéro {ContactNumber}"
+                    ]
+                },
+                {
+                    "name": "ListContacts",
+                    "slots": [],
+                    "samples": [
+                        "Parcours mes contacts",
+                        "Feuillette mon calepin"
+                    ]
+                },
+                {
+                    "name": "CallAgain",
+                    "slots": [],
+                    "samples": [
+                        "Ce n'est qu'une nouvelle émission",
+                        "Il est temps à nouveau",
+                        "Rebelotte"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "AddContact",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "ContactName",
+                            "type": "AMAZON.FirstName",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.797317843234.1578645474506"
+                            }
+                        },
+                        {
+                            "name": "ContactNumber",
+                            "type": "AMAZON.PhoneNumber",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.797317843234.611427022316"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.797317843234.611427022316",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Quel numéro dois-je ajouter ?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.797317843234.1578645474506",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Quel nom dois-je ajouter ?"
+                    }
+                ]
+            }
+        ]
+    }
+}

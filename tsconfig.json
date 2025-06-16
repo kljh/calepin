@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./lambda",
+	"target": "esnext",
+	"module": "esnext",
+	"moduleResolution": "node",
+    "strict": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+  },
+  "include": ["./src/**/*"]
+}
