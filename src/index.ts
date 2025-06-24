@@ -125,6 +125,34 @@ const CancelAndStopIntentHandler : RequestHandler = {
 	},
 };
 
+
+const ListContactsIntentHandler : RequestHandler = {
+	canHandle(handlerInput : HandlerInput) : boolean {
+		const request = handlerInput.requestEnvelope.request;
+		return request.type === 'IntentRequest'
+			&& request.intent.name === 'ListContacts';
+	},
+	handle(handlerInput : HandlerInput) : Response {
+		console.log("requestEnvelope", handlerInput.requestEnvelope);
+
+		const request = handlerInput.requestEnvelope.request;
+
+        const userId = handlerInput.requestEnvelope.session?.user?.userId;
+        const shortId = userId?.split('.')?.pop()?.substr(0,8);
+        console.log("userId", userId);
+        console.log("shortId", shortId);
+
+        // https://developer.amazon.com/en-US/docs/alexa/custom-skills/speech-synthesis-markup-language-ssml-reference.html
+        // Use also <say-as interpret-as='telephone'>2025551212</say-as>.
+        var speechText = `<speak>Vos contacts : Maman, Manou, Petit Claude, Nicolas. Pour editer vos contacts, allez sur http://app.kljh.org/calepin . Votre identifiant : <say-as interpret-as='spell-out'>${shortId}</say-as> </speak>`;
+        var displayText = `Vos contacts : Maman, Manou, Petit Claude, Nicolas.\r\nPour editer vos contacts, allez sur http://app.kljh.org/calepin \r\nVotre identifiant : ${shortId}.`;
+		return handlerInput.responseBuilder
+			.speak(speechText)
+			.withSimpleCard('Mon petit calepin.', displayText)
+			.getResponse();
+	},
+};
+
 const AddContactIntentHandler : RequestHandler = {
 	canHandle(handlerInput : HandlerInput) : boolean {
 		const request = handlerInput.requestEnvelope.request;
@@ -136,12 +164,13 @@ const AddContactIntentHandler : RequestHandler = {
 	handle(handlerInput : HandlerInput) : Response {
 		const request = handlerInput.requestEnvelope.request;
 
-		var speechText : string = "Empty slots";
+		var speechText : string = "Il me manque des infos";
 		if (request.type === 'IntentRequest')
 		if (request.intent.slots !== undefined)
 		{
 			var contactName = request.intent.slots["ContactName"].value;
 			var contactNumber = request.intent.slots["ContactNumber"].value;
+			speechText = `Je rajoute ${contactName} au ${contactNumber}`;
 		}
 
 		return handlerInput.responseBuilder
@@ -176,7 +205,7 @@ const DialNumberIntentHandler : RequestHandler = {
 		var bSent = await send_text("MonCalepin", 33_781_385459,
 			`Bonjour ${contactName}, peux-tu me rappeler ?.`);
 		if (!bSent)
-			speechText = `Echec de l'envoie du message \xE0 ${contactName}.`;
+			speechText = `Echec de l'envoi du message \xE0 ${contactName}.`;
 
 		return handlerInput.responseBuilder
 			.speak(speechText)
@@ -189,7 +218,8 @@ const DialRecentIntentHandler : RequestHandler = {
 	canHandle(handlerInput : HandlerInput) : boolean {
 		const request = handlerInput.requestEnvelope.request;
 		return request.type === 'IntentRequest'
-			&& request.intent.name === 'ComposeRecent';
+			&& ( request.intent.name === 'ComposeRecent'
+			|| request.intent.name === 'CallAgain' ) ;
 	},
 	handle(handlerInput : HandlerInput) : Response {
 		const request = handlerInput.requestEnvelope.request;
@@ -300,6 +330,7 @@ async function send_text(sender: string, recipient : number, message: string) {
 export var handler = SkillBuilders.custom()
 	.addRequestHandlers(
 		LaunchRequestHandler,
+		ListContactsIntentHandler,
 		AddContactIntentHandler,
 		DialNumberIntentHandler,
 		DialRecentIntentHandler,
